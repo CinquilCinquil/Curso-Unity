@@ -13,6 +13,16 @@ public class Player : MonoBehaviour
 
     [SerializeField] GameObject pellet;
 
+    [SerializeField] Score sc;
+    [SerializeField] Hearts hb;
+    [SerializeField] Animator anim;
+
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip jumpClip;
+
+    int score = 0;
+    float Hp = 100f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,12 +37,25 @@ public class Player : MonoBehaviour
         float vAxis = Input.GetAxis("Vertical");
 
         rb.velocity = new Vector2(hAxis*velocidade, rb.velocity.y);
+        anim.SetFloat("Velocidade", Mathf.Abs(hAxis * velocidade));
+
+        anim.SetBool("IsOnGround", IsOnGround());
 
         if (hAxis != 0) Flip(hAxis);
 
         if (Input.GetButtonDown("Jump") && IsOnGround())
         {
+            aud.PlayOneShot(jumpClip);
             rb.velocity = new Vector2(rb.velocity.x, 20);
+
+            score += 100;
+            sc.UpdateScore(score);
+
+            Hp -= 10;
+            hb.UpdateHearts(Hp);
+
+           
+
         }
 
         if (Input.GetButtonDown("Fire1"))
