@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -37,11 +36,15 @@ public class Player : MonoBehaviour
         float vAxis = Input.GetAxis("Vertical");
 
         rb.velocity = new Vector2(hAxis*velocidade, rb.velocity.y);
-        anim.SetFloat("Velocidade", Mathf.Abs(hAxis * velocidade));
 
-        anim.SetBool("IsOnGround", IsOnGround());
+        if (hAxis != 0)
+        {
+            anim.SetBool("isMoving", true);
+            Flip(hAxis);
+        }
+        else anim.SetBool("isMoving", false);
 
-        if (hAxis != 0) Flip(hAxis);
+        anim.SetBool("isGround", IsOnGround());
 
         if (Input.GetButtonDown("Jump") && IsOnGround())
         {
@@ -53,9 +56,6 @@ public class Player : MonoBehaviour
 
             Hp -= 10;
             hb.UpdateHearts(Hp);
-
-           
-
         }
 
         if (Input.GetButtonDown("Fire1"))
