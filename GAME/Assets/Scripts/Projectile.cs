@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] float velocidade = 1f;
+    [SerializeField] int shotDamage = 1;
     [SerializeField] public Vector2 direcao = Vector2.right;
 
     void Start()
@@ -14,7 +15,11 @@ public class Projectile : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D col)
     {
-        Destroy(this.gameObject, 0.5f);
-        Debug.Log(col.gameObject);
+        if (col.gameObject.tag == "Enemy")
+        {
+            col.gameObject.GetComponent<Enemy>().TakeDamage(shotDamage);
+        }
+
+        Destroy(this.gameObject, 0.2f);
     }
 }

@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip jumpClip;
 
+    [SerializeField] LevelManager manager;
+
     int score = 0;
     float Hp = 100f;
 
@@ -52,10 +54,9 @@ public class Player : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, 20);
 
             score += 100;
-            sc.UpdateScore(score);
-
-            Hp -= 10;
-            hb.UpdateHearts(Hp);
+            PlayerPrefs.SetInt("Pontos", score);
+            PlayerPrefs.Save();
+            sc.UpdateScore();
         }
 
         if (Input.GetButtonDown("Fire1"))
@@ -66,7 +67,6 @@ public class Player : MonoBehaviour
         }
 
     }
-
     bool IsOnGround()
     {
         return Physics2D.OverlapCircle(FloorCheck.position, 0.2f, Floor);
@@ -74,5 +74,13 @@ public class Player : MonoBehaviour
     void Flip(float hAxis)
     {
         transform.localScale = new Vector2(Mathf.Sign(hAxis), transform.localScale.y);
+    }
+
+    public void TakeDamage(int dmg) 
+    {
+        Hp -= dmg;
+        hb.UpdateHearts(Hp);
+
+        if (Hp <= 0) manager.Reloadlevel();
     }
 }

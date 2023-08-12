@@ -8,8 +8,14 @@ public class Score : MonoBehaviour
     [SerializeField] private TMPro.TextMeshProUGUI label;
 
     // Update is called once per frame
-    public void UpdateScore(int score)
+
+    public void Start()
     {
-        label.text = score.ToString();
+        UpdateScore();
+    }
+
+    public void UpdateScore()
+    {
+        label.text = PlayerPrefs.GetInt("Pontos", 0).ToString();
     }
 }
